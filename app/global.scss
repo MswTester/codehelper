@@ -45,6 +45,9 @@ button, input{
         left: 10px;
         bottom: 10px;
     }
+    &.createBtn{
+        color: green;
+    }
 }
 
 .html_maker{
@@ -57,5 +60,45 @@ button, input{
         width: 30%;
         height: 100%;
         background-color: #eee;
+    }
+}
+
+.in_server{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    .createBtn{
+        width: 60px;
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+    }
+    .container{
+        width: 100%;
+        height: 100%;
+        .content{
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            background: #fff;
+            user-select: none;
+            cursor: pointer;
+            .title{
+                font-size: x-large;
+                font-weight: bold;
+            }
+            .desc{
+                font-size: large;
+                font-weight: normal;
+            }
+            &:hover{background: #eee;}
+            &:active{background: #ddd;}
+        }
     }
 }

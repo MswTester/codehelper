@@ -50,6 +50,9 @@ button.backBtn, input.backBtn {
   left: 10px;
   bottom: 10px;
 }
+button.createBtn, input.createBtn {
+  color: green;
+}
 
 .html_maker {
   display: flex;
@@ -62,4 +65,50 @@ button.backBtn, input.backBtn {
   width: 30%;
   height: 100%;
   background-color: #eee;
-}/*# sourceMappingURL=global.css.map */
+}
+
+.in_server {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+}
+.in_server .createBtn {
+  width: 60px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+.in_server .container {
+  width: 100%;
+  height: 100%;
+}
+.in_server .container .content {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background: #fff;
+  user-select: none;
+  cursor: pointer;
+}
+.in_server .container .content .title {
+  font-size: x-large;
+  font-weight: bold;
+}
+.in_server .container .content .desc {
+  font-size: large;
+  font-weight: normal;
+}
+.in_server .container .content:hover {
+  background: #eee;
+}
+.in_server .container .content:active {
+  background: #ddd;
+}
+
+/*# sourceMappingURL=global.css.map */

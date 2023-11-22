@@ -2,11 +2,12 @@
 
 import type { MetaFunction } from "@remix-run/node";
 import { FC, createContext, useEffect, useState } from "react";
+import { Content } from "server/src";
 import { Socket, io } from 'socket.io-client'
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Code Helper" },
+    { title: "Let's Share" },
     { name: "description", content: "Shibal!" },
   ];
 };
@@ -25,6 +26,7 @@ export default function Index() {
   const [page, setPage] = useState<string>('main')
   const [left, setLeft] = useState<number>(20)
   const [right, setRight] = useState<number>(20)
+  const [contents, setContents] = useState<Content[]>([])
 
   useEffect(() => {
     setHydra(true)
@@ -60,6 +62,10 @@ export default function Index() {
     }
   }, [width, height, left, right])
 
+  const makeBackBtn = (_page:string) => {
+    return <button className="backBtn" onClick={e => setPage(_page)}>뒤로가기</button>
+  }
+
   return (hydra && <GlobalContext.Provider value={{}}>
     {page === 'main' ?
     <div className="main">
@@ -71,7 +77,7 @@ export default function Index() {
     page === 'server' ?
     <div className="server">
       <div className="opts">
-        <button className="backBtn" onClick={e => setPage('main')}>뒤로가기</button>
+        {makeBackBtn('main')}
         <input type="text" name="" id="" value={socketAddr} onChange={e => setSocketAddr(e.target.value)} placeholder="서버 주소를 입력하세요."/>
         <button disabled={connecting} onClick={e => {
           setConnecting(true)
@@ -81,6 +87,10 @@ export default function Index() {
             setPage('in_server')
             socket.off('connect')
             socket.off('connect_error')
+            socket.on('getContents', (data: Content[]) => {
+              setContents(data)
+            })
+            socket.emit('getContents')
             setConnecting(false)
           })
           socket.on('connect_error', () => {
@@ -96,13 +106,32 @@ export default function Index() {
     </div>:
     page === 'in_server' ?
     <div className="in_server">
+      <button className="createBtn" onClick={e => setPage('make_content')}>+</button>
+      <div className="container">
+        {contents.map((v, i) => (
+          <div key={i} className="content">
+          <div className="title">{v.title}</div>
+          <div className="desc">{`()`}</div>
+        </div>))}
+      </div>
+      <button className="backBtn" onClick={e => {
+        socket?.disconnect()
+        socket?.close()
+        socket?.off('getContents')
+        setSocket(null)
+        setPage('main')
+      }}>뒤로가기</button>
     </div>:
     page === 'html_maker' ?
     <div className="html_maker">
       <div className="base" style={{width:`${left}%`}}></div>
       <div className="editor" style={{width:`${100-left-right}%`}}></div>
       <div className="option" style={{width:`${right}%`}}></div>
-      <button className="backBtn" onClick={e => setPage('main')}>뒤로가기</button>
+      {makeBackBtn('main')}
+    </div>:
+    page === 'make_content' ? 
+    <div className="make_content">
+      {makeBackBtn('in_server')}
     </div>:
     <></>
     }

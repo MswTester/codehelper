@@ -17,6 +17,7 @@ const socket = new socket_io_1.Server(server, {
     }
 });
 const port = 8080;
+let contents = [];
 const storage = multer_1.default.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -26,14 +27,18 @@ const storage = multer_1.default.diskStorage({
     }
 });
 const upload = (0, multer_1.default)({ storage: storage });
+app.use('/uploads', express_1.default.static('uploads'));
 app.get('/', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
-app.post('/upload', upload.array('file'), (req, res) => {
+app.post('/upload', upload.array('files'), (req, res) => {
     res.send('ok');
 });
 socket.on('connection', (socket) => {
     console.log('a user connected');
+    socket.on('getContents', () => {
+        socket.emit('contents', contents);
+    });
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
